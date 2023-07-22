@@ -1,14 +1,17 @@
 const express=require('express')
 const app=express()
-
 const db=require('./models')
 const Todo=db.Todo
 const { engine } = require('express-handlebars')
+const methodOverride = require('method-override')
 app.engine('.hbs', engine({extname: '.hbs'}))
 app.set('view engine', '.hbs')
 app.set('views', './views')
 app.use(express.static('public'))
 app.use(express.urlencoded({extends:true}))
+app.use(methodOverride('_method'))
+
+
 app.get('/',(req,res)=>{
   res.render('home')
 })
@@ -45,11 +48,30 @@ app.get('/todos/:id',(req,res)=>{
 })
 
 app.get('/todos/:id/edit',(req,res)=>{
-  res.send(`edit todo : ${req.params.id}`)
+  const id=req.params.id
+  return Todo.findByPk(id,{
+    attributes:['id','name'],
+    raw:true
+  }).then((todo)=>res.render('edit',{todo}))
+  
 })
 
 app.put('/todos/:id',(req,res)=>{
-  res.send(`modify todo `)
+  const body=req.body
+  const id=req.params.id
+
+  return Todo.update({name:body.name},{
+    where : {id}
+  }).then(()=>res.redirect(`/todos/${id}`))
+
+  // return Todo.findByPk(id,{
+  //   attributes:['id','name']
+  // }).then((todo)=>{
+  //   todo.name=body.name
+  //   console.log(todo)
+  //   return todo.save()
+    
+  // }).then((todo)=>res.redirect(`/todos/${todo.id}`))
 })
 
 app.delete('/todos/:id',(req,res)=>{
