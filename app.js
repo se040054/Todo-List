@@ -13,7 +13,7 @@ app.use(methodOverride('_method'))
 
 
 app.get('/',(req,res)=>{
-  res.render('home')
+  res.redirect('/todos')
 })
 
 app.get('/todos',(req,res)=>{
