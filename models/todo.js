@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Todo.init({
     name: DataTypes.STRING,
-    done : { 
+    isDone : { 
         type: DataTypes.BOOLEAN ,
         defaultValue: false,
         allowNull: false

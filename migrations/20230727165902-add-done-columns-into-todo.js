@@ -7,7 +7,7 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.addColumn(
     'Todos' ,
-    'done' , 
+    'isDone' , 
       { type: Sequelize.BOOLEAN ,
         defaultValue: false,
         allowNull: false}
@@ -17,7 +17,7 @@ module.exports = {
   async down (queryInterface, Sequelize) {
     await queryInterface.removeColumn(
       'Todos',
-      'done'
+      'isDone'
       );
   }
 };

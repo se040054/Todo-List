@@ -18,7 +18,7 @@ app.get('/',(req,res)=>{
 
 app.get('/todos',(req,res)=>{
   return Todo.findAll({
-    attributes: ['id', 'name'],
+    attributes: ['id', 'name','isDone'],
     raw: true 
     })
             .then((todos)=>res.render('todos',{todos}))
@@ -42,7 +42,7 @@ app.post('/todos',(req,res)=>{
 app.get('/todos/:id',(req,res)=>{
   const id =req.params.id
   return Todo.findByPk(id,{
-    attributes:['id','name'],
+    attributes:['id','name','isDone'],
     raw:true
   }).then((todo)=>res.render('todo',{todo}))
 })
@@ -50,17 +50,21 @@ app.get('/todos/:id',(req,res)=>{
 app.get('/todos/:id/edit',(req,res)=>{
   const id=req.params.id
   return Todo.findByPk(id,{
-    attributes:['id','name'],
+    attributes:['id','name','isDone'],
     raw:true
   }).then((todo)=>res.render('edit',{todo}))
   
 })
 
 app.put('/todos/:id',(req,res)=>{
-  const body=req.body
+  const { name , isDone } =req.body
   const id=req.params.id
 
-  return Todo.update({name:body.name},{
+  return Todo.update(
+    {
+      name , 
+      isDone : isDone ==='done'
+    },{
     where : {id}
   }).then(()=>res.redirect(`/todos/${id}`))
 
