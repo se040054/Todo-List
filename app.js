@@ -4,12 +4,21 @@ const db=require('./models')
 const Todo=db.Todo
 const { engine } = require('express-handlebars')
 const methodOverride = require('method-override')
+const flash = require('connect-flash')
+const session = require('express-session')
+
 app.engine('.hbs', engine({extname: '.hbs'}))
 app.set('view engine', '.hbs')
 app.set('views', './views')
 app.use(express.static('public'))
 app.use(express.urlencoded({extends:true}))
 app.use(methodOverride('_method'))
+app.use(session({
+	secret: 'ThisIsSecret',
+	resave: false,
+	saveUninitialized: false
+}))
+app.use(flash())
 
 
 app.get('/',(req,res)=>{
@@ -21,7 +30,10 @@ app.get('/todos',(req,res)=>{
     attributes: ['id', 'name','isDone'],
     raw: true 
     })
-            .then((todos)=>res.render('todos',{todos}))
+            .then((todos)=>{
+              res.render('todos',{todos , message : req.flash('success')[0] || req.flash('deleted')[0] })
+            }
+              )
             .catch((err)=>{res.status(422).json(err)})
 })
 
@@ -34,6 +46,7 @@ app.post('/todos',(req,res)=>{
   const name =req.body.name
   
   return Todo.create({name}).then(()=>{
+    req.flash('success','新增成功')
     res.redirect('/todos')
   })
 })
@@ -44,7 +57,7 @@ app.get('/todos/:id',(req,res)=>{
   return Todo.findByPk(id,{
     attributes:['id','name','isDone'],
     raw:true
-  }).then((todo)=>res.render('todo',{todo}))
+  }).then((todo)=>res.render('todo',{todo,message:req.flash('edited')}))
 })
 
 app.get('/todos/:id/edit',(req,res)=>{
@@ -66,7 +79,10 @@ app.put('/todos/:id',(req,res)=>{
       isDone : isDone ==='done'
     },{
     where : {id}
-  }).then(()=>res.redirect(`/todos/${id}`))
+  }).then(()=>{
+    req.flash('edited','編輯成功')
+    res.redirect(`/todos/${id}`)
+  })
 
   // return Todo.findByPk(id,{
   //   attributes:['id','name']
@@ -82,7 +98,10 @@ app.delete('/todos/:id',(req,res)=>{
   const id=req.params.id
   return Todo.destroy({
     where:{id}
-  }).then(()=>{res.redirect('/todos')})
+  }).then(()=>{
+    req.flash('deleted','已刪除')
+    res.redirect('/todos')
+  })
   
 })
 
