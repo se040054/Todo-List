@@ -7,6 +7,12 @@ const methodOverride = require('method-override')
 const flash = require('connect-flash')
 const session = require('express-session')
 
+if (process.env.NODE_ENV === 'development') {
+	require('dotenv').config()
+}
+
+console.log(process.env.SESSION_SECRET)
+
 const router=require('./routes')
 const messageHandler = require('./middlewares/message-handler')
 const errorHandlerMiddleware = require('./middlewares/error-handler middleware')
@@ -17,14 +23,15 @@ app.set('view engine', '.hbs')
 app.set('views', './views')
 
 app.use(express.static('public'))
-app.use(express.urlencoded({extends:true}))
+app.use(express.urlencoded({extended:true}))
 app.use(methodOverride('_method'))
 app.use(session({
-	secret: 'ThisIsSecret',
+	secret: process.env.SESSION_SECRET,
 	resave: false,
 	saveUninitialized: false
-}))
+}));
 app.use(flash())
+
 
 
 
