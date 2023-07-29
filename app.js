@@ -8,14 +8,14 @@ const flash = require('connect-flash')
 const session = require('express-session')
 
 const router=require('./routes')
-
-
-
-
+const messageHandler = require('./middlewares/message-handler')
+const errorHandlerMiddleware = require('./middlewares/error-handler middleware')
 
 app.engine('.hbs', engine({extname: '.hbs'}))
+
 app.set('view engine', '.hbs')
 app.set('views', './views')
+
 app.use(express.static('public'))
 app.use(express.urlencoded({extends:true}))
 app.use(methodOverride('_method'))
@@ -25,8 +25,14 @@ app.use(session({
 	saveUninitialized: false
 }))
 app.use(flash())
+
+
+
+app.use(messageHandler)
+
 app.use(router)
 
+app.use(errorHandlerMiddleware)
 
 
 
