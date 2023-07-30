@@ -1,7 +1,6 @@
 const express=require('express')
 const app=express()
-const db=require('./models')
-const Todo=db.Todo
+
 const { engine } = require('express-handlebars')
 const methodOverride = require('method-override')
 const flash = require('connect-flash')
@@ -11,7 +10,7 @@ if (process.env.NODE_ENV === 'development') {
 	require('dotenv').config()
 }
 
-console.log(process.env.SESSION_SECRET)
+// console.log(process.env.SESSION_SECRET)
 
 const router=require('./routes')
 const messageHandler = require('./middlewares/message-handler')

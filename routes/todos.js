@@ -3,21 +3,33 @@ const router =express.Router()
 const db=require('../models')
 const Todo=db.Todo
 
+
+
 router.get('/',(req,res,next)=>{
     // throw new Error('error' , 'error happened') 同步錯誤
+    const  page=parseInt(req.query.page) || 1
+    limit = 10 
     return Todo.findAll({
     attributes: ['id', 'name','isDone'],
+    
     raw: true 
     })
       .then((todos)=>{
-      // throw new Error('error' , 'error happened') 異步錯誤
-      res.render('todos',{todos})
+      
+      res.render('todos',{
+        todos :todos.slice( (page-1)*limit , page*limit ) , 
+        prev : page > 1 ? page -1 : page , 
+        next : page + 1,
+        page
+      })
       })
       .catch((error)=>{ 
         error.errorMessage='取得Todo清單時發生問題'
         next(error)
       })
 })
+
+
 
 router.get('/new',(req,res)=>{
     // throw new Error('error' , 'error happened')
