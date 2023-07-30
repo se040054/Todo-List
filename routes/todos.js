@@ -7,17 +7,18 @@ const Todo=db.Todo
 
 router.get('/',(req,res,next)=>{
     // throw new Error('error' , 'error happened') 同步錯誤
-    const  page=parseInt(req.query.page) || 1
-    limit = 10 
+    const page=parseInt(req.query.page) || 1
+    const limit = 10 
     return Todo.findAll({
     attributes: ['id', 'name','isDone'],
-    
+    offset:(page-1) *limit  , 
+    limit ,  
     raw: true 
     })
       .then((todos)=>{
       
       res.render('todos',{
-        todos :todos.slice( (page-1)*limit , page*limit ) , 
+        todos  , 
         prev : page > 1 ? page -1 : page , 
         next : page + 1,
         page
