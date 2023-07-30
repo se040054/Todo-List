@@ -5,32 +5,35 @@ const Todo=db.Todo
 
 
 
-router.get('/',(req,res,next)=>{
+router.get('/', async (req,res,next)=>{
     // throw new Error('error' , 'error happened') 同步錯誤
     const page=parseInt(req.query.page) || 1
     const limit = 10 
-    return Todo.findAll({
+    const todos = await Todo.findAll({
     attributes: ['id', 'name','isDone'],
     offset:(page-1) *limit  , 
     limit ,  
     raw: true 
-    })
-      .then((todos)=>{
-      
-      res.render('todos',{
-        todos  , 
-        prev : page > 1 ? page -1 : page , 
-        next : page + 1,
-        page
-      })
-      })
-      .catch((error)=>{ 
+    }).catch((error)=>{
         error.errorMessage='取得Todo清單時發生問題'
         next(error)
       })
+    const {count} = await Todo.findAndCountAll()
+      .catch((error)=>{
+        error.errorMessage='取得項目總數量發生問題'
+        next(error)
+      })
+    const all = Math.ceil(count/limit)
+      
+    res.render(('todos'),{
+      todos , 
+      page , 
+      prev :  page>0 ? page-1 : page , 
+      next : page < all ? page +1 : page , 
+      all
+    })  
+      
 })
-
-
 
 router.get('/new',(req,res)=>{
     // throw new Error('error' , 'error happened')

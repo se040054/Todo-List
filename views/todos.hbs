@@ -15,16 +15,25 @@
 
 
 <ul>
+  <form action="/todos" method="GET" style="display: inline;">
+    <input type="hidden" name="page" value="1">
+    <button type="submit">
+      << </button>
+  </form>
  <form action="/todos" method="GET" style="display: inline;">
   <input type="hidden" name="page" value="{{prev}}">
-  <button type="submit">prev</button>
+  <button type="submit"> < </button>
  </form>
 
-  <span>page : {{page}} </span>
+  <span>page : {{page}} of {{all}} </span>
 
   <form action="/todos" method="GET" style="display: inline;">
     <input type="hidden" name="page" value="{{next}}">
-    <button type="submit">next</button>
+    <button type="submit"> > </button>
  </form>
+  <form action="/todos" method="GET" style="display: inline;">
+    <input type="hidden" name="page" value="{{all}}">
+    <button type="submit"> >> </button>
+  </form>
 </ul>
 
