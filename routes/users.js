@@ -1,6 +1,7 @@
 const express=require('express')
 const router = express.Router()
 const db=require('../models')
+const passport = require('passport')
 const User = db.User
 
 
@@ -45,9 +46,29 @@ router.post('/register',(req,res,next)=>{
   })
 })
 
-router.post('/login',(req,res)=>[
-  res.send('you have been login ')
-])
+// router.post('/login',
+//   passport.authenticate('local',{ //教案方法 無法確認是否有欄位為空，有欄位空則missing credential
+//     successRedirect : '/todos',
+//     failureRedirect : '/users/login' ,
+//     failureFlash :true
+//   }))
+
+//GPT給的
+router.post('/login',(req,res,next)=>{
+  const {email,password} = req.body
+  if (!email || !password){
+    req.flash('error','信箱或密碼沒填寫')
+    return res.redirect('/users/login')
+  }
+
+  passport.authenticate("local", {
+    successRedirect: "/todos",
+    failureRedirect: "/users/login",
+    failureFlash: true,
+  })(req, res, next);
+})
+//順序是先調用router的req,res 然後轉交給passport驗證 然後轉交回router的req,res，因為前面多了一個驗證後面要再轉交回來
+
 router.post('/logout',(req,res)=>{
   res.send('you have been log out')
 })
