@@ -1,5 +1,5 @@
 {{>message}}
-
+{{>logout}}
 <form action="/todos/{{todo.id}}?_method=PUT" method="POST">
   <input name="isDone" value="done" type="checkbox" {{#if todo.isDone}} checked {{/if}}>
   <input type="text" placeholder="enter todo name ... " name="name" value="{{todo.name}}">
@@ -7,8 +7,3 @@
   <a href="/todos">back</a>
 </form>
 
-
-<script>
-  const done =  document.querySelector('#')
-
-</script>

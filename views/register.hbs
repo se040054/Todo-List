@@ -1,0 +1,99 @@
+{{>message}}
+
+<H1>Register</H1>
+
+<form action="/users/register" method="POST">
+
+<label for="account">Account : </label>
+<input name="account" id="account" type="text" value="{{data.account}}" >
+<div></div>
+<label for="password">Password : </label>
+<input name="password" id="password" type="password" value="{{data.password}}" >
+<div></div>
+<label for="confirm_password">confirm password : </label>
+<input name="confirm_password" id="confirm_password" value="{{data.password}}" type="text" >
+<div></div>
+<label for="email">Email : </label>
+<input name="email" id="email" type="text" value="{{data.email}}" >
+<div></div>
+
+<button type="submit">Register</button>
+</form>
+
+<div></div>
+
+
+<span>Already have an Account ? </span>
+<a href="/users/login">login</a>
+{{!-- 
+{{#if data}}
+<div id="dataValid" class="Valid" hidden></div>
+{{/if}}
+<script>
+  const form=document.querySelector('form')
+  const account=document.querySelector('#account')
+  const password=document.querySelector('#password')
+  const confirm_password=document.querySelector('#confirm_password')
+  const email=document.querySelector('#email')
+  const dataValid = document.querySelector('#dataValid')
+  let accountValid=false
+  let passwordValid=false
+  let confirm_passwordValid=false
+  let emailValid=false
+  if (dataValid.classList.contains("Valid")){
+    accountValid=true
+    passwordValid=true
+    confirm_passwordValid=true
+    emailValid=true
+  }
+
+  account.addEventListener('input',function(event){
+    if(event.target.value.length < 8){
+      console.log('account not enough')
+      accountValid=false
+    }else{
+      accountValid=true
+      console.log('account  enough')
+    }  
+  })
+  password.addEventListener('input',function(event){
+    if(event.target.value.length < 8){
+      console.log('password not enough')
+      passwordValid=false
+    }else{
+      passwordValid=true
+      console.log('password enough')
+    }  
+  })
+  confirm_password.addEventListener('input',function(event){
+    if (event.target.value!==password.value){
+      console.log('password not match')
+      confirm_passwordValid=false
+    }else{
+      confirm_passwordValid=true
+      console.log('password  match')
+    }  
+  })
+  email.addEventListener('input',function(event){
+    if(event.target.value.length < 10){
+      event.preventDefault()
+      event.stopPropagation()
+      console.log('email not enough')
+      emailValid=false
+    }else{
+      emailValid=true
+      console.log('email  enough')
+    }  
+  })
+
+
+  form.addEventListener('submit',function (event){
+    if (!accountValid||!passwordValid||!confirm_passwordValid||!emailValid){
+      event.preventDefault()
+      event.stopPropagation()
+      alert('有資料未填寫完整')
+    }
+  })
+
+
+</script> --}}
