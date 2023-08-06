@@ -11,13 +11,13 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      User.hasMany(models.Todo)
     }
   }
   User.init({
     account: {
       type: DataTypes.STRING,
       allowNull: false,
-      
     },
     password: {
       type: DataTypes.STRING,
