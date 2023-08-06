@@ -28,10 +28,15 @@ passport.serializeUser((user,done)=>{
   return done(null  ,{id ,account  ,email })
 })
 
+passport.deserializeUser((user,done)=>{
+  done(null,{id: user.id})
+})
 
 const users = require("./users");
 const todos = require("./todos");
-router.use('/todos',todos)
+const authHandler = require('../middlewares/auth-handler');
+
+router.use('/todos',authHandler, todos)
 router.use("/users", users);
 
 

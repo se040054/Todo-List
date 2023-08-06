@@ -7,6 +7,7 @@ const Todo=db.Todo
 
 router.get('/', async (req,res,next)=>{
     // throw new Error('error' , 'error happened') 同步錯誤
+    console.log(req.user)
     const page=parseInt(req.query.page) || 1
     const limit = 10 
     const todos = await Todo.findAll({

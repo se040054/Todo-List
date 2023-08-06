@@ -70,7 +70,13 @@ router.post('/login',(req,res,next)=>{
 //順序是先調用router的req,res 然後轉交給passport驗證 然後轉交回router的req,res，因為前面多了一個驗證後面要再轉交回來
 
 router.post('/logout',(req,res)=>{
-  res.send('you have been log out')
+  req.logout((error)=>{
+    if (error){
+      next(error)
+    }
+    return res.redirect("/users/login");
+  })
+  
 })
 
 
