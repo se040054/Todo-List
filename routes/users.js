@@ -1,5 +1,6 @@
 const express=require('express')
 const router = express.Router()
+const bcrypt = require('bcryptjs')
 const db=require('../models')
 const passport = require('passport')
 const User = db.User
@@ -24,17 +25,17 @@ router.post('/register',(req,res,next)=>{
     req.flash("error", "密碼不一致");
     return res.redirect("back");    
   }
+
   return User.count({
     where: {account}
   }).then((user)=>{
     if (user>0){
-      req.flash("error", "帳號已被使用!");
-      
-    }else{
+      req.flash("error", "帳號已被使用");
+      return res.redirect("back");    
+    }
     req.flash('success','創建成功')
-    return  User.create({account , password , email})
-    
-  }
+    return bcrypt.hash(password,10)
+            .then((hash)=>User.create({account , password:hash , email}))  
   }).then((user)=>{
     if (!user){
     return res.redirect("back");
