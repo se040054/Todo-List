@@ -85,11 +85,20 @@ router.get("/:id", (req, res, next) => {
 router.get("/:id/edit", (req, res, next) => {
   // throw new Error('error' , 'error happened')
   const id = req.params.id;
+  const userId = req.user.id
   return Todo.findByPk(id, {
-    attributes: ["id", "name", "isDone"],
+    attributes: ["id", "name", "isDone",'userId'],
     raw: true,
   })
     .then((todo) => {
+      if (!todo) {
+        req.flash("error", "資料不存在");
+        return res.redirect("/todos");
+      }
+      if (todo.userId !== userId) {
+        req.flash("error", "權限不足");
+        return res.redirect("/todos");
+      }
       // throw new Error('error' , 'error happened')
       res.render("edit", { todo });
     })
