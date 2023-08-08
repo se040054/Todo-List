@@ -6,10 +6,10 @@ module.exports = {
     let transaction;
     try {
       const hash = await bcrypt.hash("12345678", 10);
-      transaction = await queryInterface.transaction();
-      await queryInterface.sequelize.query(
-        "ALTER TABLE Todos AUTO_INCREMENT = 1;"
-      ); //自行測試，因為undo回滾不會消除auto_increment的id增加導致每次重設時id+10
+      transaction = await queryInterface.sequelize.transaction();
+      // await queryInterface.sequelize.query(
+      //   "ALTER TABLE Todos AUTO_INCREMENT = 1;"
+      // ); //自行測試，因為undo回滾不會消除auto_increment的id增加導致每次重設時id+10
       await queryInterface.bulkInsert(
         "Users",
         [
@@ -37,7 +37,8 @@ module.exports = {
       await transaction.commit();
     } catch (error) {
       if (transaction) {
-        transaction.rollback();
+       await transaction.rollback();
+        console.log(error)
       }
     }
   },
