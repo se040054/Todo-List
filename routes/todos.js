@@ -20,7 +20,8 @@ router.get("/", async (req, res, next) => {
     error.errorMessage = "取得Todo清單時發生問題";
     next(error);
   });
-  const { count } = await Todo.findAndCountAll().catch((error) => {
+  const { count } = await Todo.findAndCountAll({where:{userId}}).catch((error) => {
+    
     error.errorMessage = "取得項目總數量發生問題";
     next(error);
   });
