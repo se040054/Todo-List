@@ -14,8 +14,8 @@ module.exports = {
     dialect: "mysql",
   },
   production: {
-    use_env_variable: "PROD_DATABASE_URL",
-    operatorsAliases: false,
+    use_env_variable: "PROD_DATABASE_URL", //這裡
+    operatorsAliases: false, //這裡
     host: process.env.RDS_HOSTNAME,
     username: process.env.RDS_USERNAME,
     password: process.env.RDS_PASSWORD,
