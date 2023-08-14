@@ -14,12 +14,14 @@ passport.use(
     })
       .then((user) => {
         if (!user) {
+          
           return done(null, false, { message: "email或密碼錯誤" });
         }
         return bcrypt.compare(password, user.password).then((isMatch) => {
           if (!isMatch) {
             return done(null, false, { message: "email或密碼錯誤" });
           }
+          console.log(user);
           return done(null, user);
         });
       })
@@ -39,8 +41,9 @@ passport.use(
       profileFields: ["id", "displayName"],
     },
     (accessToken, refreshToken, profile, done) => {
-      const email = "example@facebook.com";
       const name = profile.displayName;
+      const email="example@mail.com"
+      console.log(profile)
       return User.findOne({
         attributes: ["id", "email", "account"],
         where: { email },
